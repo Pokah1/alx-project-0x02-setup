@@ -1,7 +1,7 @@
 import UserCard from "@/components/common/UserCard";
 import Header from "@/components/layout/Header";
 import { type UserProps } from "@/interfaces";
-import { GetStaticProps } from "next";
+
 
 type FetchedUser = {
     id: number;
@@ -43,26 +43,28 @@ const Users: React.FC<UserPageProps> = ({
     )
 } 
 
-export const getStaticProps: GetStaticProps = async() => {
-const response = await fetch(
-    'https://jsonplaceholder.typicode.com/users'
-);
-const data: FetchedUser[] = await response.json();
+export async function getStaticProps() {
+  const response = await fetch(
+    "https://jsonplaceholder.typicode.com/users"
+  );
+  const data: FetchedUser[] = await response.json();
 
-const users: UserProps[] = data.slice(0, 10).map((user) => ({
+  const users: UserProps[] = data.slice(0, 10).map((user) => ({
     name: user.name,
     email: user.email,
     address: {
-        street: user.address.street,
-        city: user.address.city,
-        zipcode: user.address.zipcode,
-    }
-}));
-return {
+      street: user.address.street,
+      city: user.address.city,
+      zipcode: user.address.zipcode,
+    },
+  }));
+
+  return {
     props: {
-        users,
-    }
+      users,
+    },
+  };
 }
-}
+
 
 export default Users
